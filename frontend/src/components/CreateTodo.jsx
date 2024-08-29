@@ -16,7 +16,7 @@ export function CreateTodo ({setTodos}){
 
     try{
 
-        const response = await axios.post("http://localhost:3000/todo",{
+        const response = await axios.post("https://todo-app-iciv.onrender.com/todo",{
             title,
             description,
             completed : false,
