@@ -1,75 +1,120 @@
 const express = require("express");
-const {createtodo, updatetodo} = require("./types.js")
-const {todo, connectDB} = require("./db.js")
-
+const { createtodo, updatetodo } = require("./types.js");
+const { todo, connectDB } = require("./db.js");
+const cors = require("cors");
 
 const app = express();
 require('dotenv').config();
 
-const PORT = process.env.PORT || 3000
+app.use(cors());
+app.use(express.json());
+
+const PORT = process.env.PORT || 3000;
 
 connectDB();
 
-app.use(express.json())
+// Create a new todo
+app.post("/todo", async function(req, res) {
+  const createPayload = req.body;
+  const parsedPayload = createtodo.safeParse(createPayload);
+  
+  if (!parsedPayload.success) {
+    return res.status(400).json({
+      msg: "Invalid input data",
+    });
+  }
+  
+  try {
+    // Insert data into MongoDB
+    const newTodo = await todo.create({
+      title: createPayload.title,
+      description: createPayload.description,
+      completed: false
+    });
+    
+    res.status(201).json({
+      msg: "Todo created successfully",
+      todo: newTodo
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: "Error creating todo",
+      error: error.message
+    });
+  }
+});
 
-app.post("/todo", async function(req,res){
-     const createPayload = req.body
-     const parsedPayload = createtodo.safeParse(createPayload);
-     if(!parsedPayload.success){
-         res.status(411).json({
-            msg : "You sent the wrong inputs",
-         })
-         return;
-     }
-     // put data to mongoDB
-     await todo.create({
-        title : createPayload.title,
-        description : createPayload.description,
-        completed : false
-     })
-     res.json({
-        msg : "todo created successfully"
-     })
-})
+// Fetch all todos
+app.get("/todos", async function(req, res) {
+  try {
+    const todos = await todo.find({});
+    res.json(todos); // Return the todos directly as an array
+  } catch (error) {
+    res.status(500).json({
+      msg: "Error fetching todos",
+      error: error.message
+    });
+  }
+});
 
-app.get("/todos", async function(req,res){
-   const todos =  await todo.find({})
+// Update a todo's completed status
+app.put("/todos/:id", async function(req, res) {
+  const updatePayload = req.body;
+  const parsedPayload = updatetodo.safeParse(updatePayload);
 
-   res.json({
-    todos
-   })
-})
+  if (!parsedPayload.success) {
+    return res.status(400).json({
+      msg: "Invalid input data",
+    });
+  }
 
-app.put("/completed", async function(req,res){
-    const updatePayload = req.body
-    const parsedPayload = updatetodo.safeParse(updatePayload);
-    if(!parsedPayload.success){
-        res.status(411).json({
-           msg : "You sent the wrong inputs",
-        })
-        return;
+  try {
+    const updatedTodo = await todo.findByIdAndUpdate(
+      req.params.id,
+      { completed: true },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedTodo) {
+      return res.status(404).json({
+        msg: "Todo not found",
+      });
     }
-    await todo.updateOne({
-         _id : req.body.id
-    },{
-        completed : true
-    })
+
     res.json({
-        msg : "The todo is completed"
-    })
-})
+      msg: "Todo marked as completed",
+      todo: updatedTodo
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: "Error updating todo",
+      error: error.message
+    });
+  }
+});
 
-app.delete("/todo/:id", async function(req,res){
-    await todo.deleteOne({
-        _id : req.params.id
-    })
+// Delete a todo
+app.delete("/todo/:id", async function(req, res) {
+  try {
+    const deletedTodo = await todo.findByIdAndDelete(req.params.id);
+
+    if (!deletedTodo) {
+      return res.status(404).json({
+        msg: "Todo not found",
+      });
+    }
+
     res.json({
-        msg : "todo deleted successfully"
-    })
-})
+      msg: "Todo deleted successfully"
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: "Error deleting todo",
+      error: error.message
+    });
+  }
+});
 
-
-
-app.listen(PORT, () =>{
-    console.log(`server is running on port ${PORT}`);
-})
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});

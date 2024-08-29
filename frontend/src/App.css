@@ -1,0 +1,109 @@
+/* App.css */
+
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  /* Container Styles */
+  .container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    max-width: 100%;
+    text-align: center;
+  }
+  
+  /* Title Styles */
+  h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  /* Todo Item Styles */
+  .todo-item {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .todo-item h2 {
+    margin: 0;
+    font-size: 18px;
+  }
+  
+  .todo-item p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  /* Button Styles */
+  button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Complete Button Styles */
+  button.complete {
+    background-color: #4CAF50;
+  }
+  
+  button.complete:hover {
+    background-color: #45a049;
+  }
+  
+  /* Delete Button Styles */
+  button.delete {
+    background-color: #f44336;
+    margin-left: 10px;
+  }
+  
+  button.delete:hover {
+    background-color: #d32f2f;
+  }
+  
+  /* Input Styles */
+  input[type="text"] {
+    width: calc(100% - 16px);
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  /* Flex container for buttons */
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    .container {
+      width: 90%;
+    }
+  }
+  
