@@ -57,41 +57,26 @@ app.get("/todos", async function(req, res) {
   }
 });
 
-// Update a todo's completed status
-app.put("/todos/:id", async function(req, res) {
-  const updatePayload = req.body;
-  const parsedPayload = updatetodo.safeParse(updatePayload);
 
-  if (!parsedPayload.success) {
-    return res.status(400).json({
-      msg: "Invalid input data",
-    });
-  }
+// Update a todo
+app.put("/todos/:id", async function (req, res) {
+  const id = req.params.id; 
+  const updatePayload = req.body; 
 
   try {
-    const updatedTodo = await todo.findByIdAndUpdate(
-      req.params.id,
-      { completed: true },
-      { new: true } // Return the updated document
+    const updatedTodo = await todo.updateOne(
+      { _id: id }, 
+      { $set: { completed: updatePayload.completed } } 
     );
-
-    if (!updatedTodo) {
-      return res.status(404).json({
-        msg: "Todo not found",
-      });
-    }
-
     res.json({
-      msg: "Todo marked as completed",
-      todo: updatedTodo
+      msg: "The todo is completed",
     });
-  } catch (error) {
-    res.status(500).json({
-      msg: "Error updating todo",
-      error: error.message
-    });
+  } catch (e) {
+    console.error("Error updating todo:", e);
+    res.status(500).json({ msg: "Error updating todo" });
   }
 });
+
 
 // Delete a todo
 app.delete("/todo/:id", async function(req, res) {

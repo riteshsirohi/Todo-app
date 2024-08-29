@@ -27,15 +27,16 @@ function App() {
    const handleComplete = async (id) =>{
      
        try{
-         await axios.put(`http://localhost:3000/todos/${id}`,{
+        const response = await axios.put(`http://localhost:3000/todos/${id}`,{
              completed : true,
          })
+         console.log(response.data);
 
          setTodos((prev) => prev.map((todo) =>{
-             if(todo.id === id){
+             if(todo._id === id){
                 return {
                     ...todo,
-                    completed : true
+                    completed : true,
                 }
              }
              return todo;
