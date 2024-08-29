@@ -14,7 +14,7 @@ function App() {
      const fetchtodos = async () =>{
 
          try {
-             const response = await axios.get("http://localhost:3000/todos");
+             const response = await axios.get("https://todo-app-iciv.onrender.com/todos");
               console.log(response.data);
               setTodos(response.data);
          } catch (e) {
@@ -27,7 +27,7 @@ function App() {
    const handleComplete = async (id) =>{
      
        try{
-        const response = await axios.put(`http://localhost:3000/todos/${id}`,{
+        const response = await axios.put(`https://todo-app-iciv.onrender.com/todos/${id}`,{
              completed : true,
          })
          console.log(response.data);
