@@ -5,7 +5,7 @@ export function Todos({ todos, handleComplete, setTodos }) {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:3000/todo/${id}`);
+            await axios.delete(`https://todo-app-iciv.onrender.com/todo/${id}`);
             setTodos((prevTodos) => prevTodos.filter((todo) => todo._id !== id));
         } catch (error) {
             console.log("Error deleting todo", error);
